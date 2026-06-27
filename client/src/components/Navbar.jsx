@@ -30,11 +30,11 @@ const Navbar = () => {
                     onClick={() => setIsOpen(!isOpen)}
                 />
 
-                <Link onClick={() => { scrollTo(0, 0), setIsOpen(!isOpen) }} to='/'>Home</Link>
-                <Link onClick={() => { scrollTo(0, 0), setIsOpen(!isOpen) }} to='/movies'>Movies</Link>
-                <Link onClick={() => { scrollTo(0, 0), setIsOpen(!isOpen) }} to='/'>Theaters</Link>
-                <Link onClick={() => { scrollTo(0, 0), setIsOpen(!isOpen) }} to='/'>Releases</Link>
-                <Link onClick={() => { scrollTo(0, 0), setIsOpen(!isOpen) }} to='/favourite'>Favourites</Link>
+                <Link onClick={() => { scrollTo(0, 0); setIsOpen(!isOpen) }} to='/'>Home</Link>
+                <Link onClick={() => { scrollTo(0, 0); setIsOpen(!isOpen) }} to='/movies'>Movies</Link>
+                <Link onClick={() => { scrollTo(0, 0); setIsOpen(!isOpen) }} to='/'>Theaters</Link>
+                <Link onClick={() => { scrollTo(0, 0); setIsOpen(!isOpen) }} to='/'>Releases</Link>
+                <Link onClick={() => { scrollTo(0, 0); setIsOpen(!isOpen) }} to='/favourite'>Favourites</Link>
             </div>
 
             <div className='flex items-center gap-8'>
