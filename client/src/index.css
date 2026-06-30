@@ -20,3 +20,14 @@ body{
 .no-scrollbar{
   scrollbar-width: none;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+}
+
+/*Targets the calendar icon in <input type="date">
+inverts color (black → white, white → black)*/
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
