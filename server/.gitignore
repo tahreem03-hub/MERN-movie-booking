@@ -1,0 +1,47 @@
+# dependencies
+node_modules/
+
+# env files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# runtime
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# coverage (if testing)
+coverage/
+
+# build output
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# uploads (if you store files locally)
+uploads/
+
+# optional (if using TypeScript)
+*.tsbuildinfo
+
+# optional cache
+.cache/
+.tmp/
