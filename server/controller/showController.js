@@ -1,6 +1,6 @@
 // this function will fetch movie data from TMDB and send it in response
 
-export const nowPlaywingMovies= async(req, res)=>{
+export const getNowPlaywingMovies= async(req, res)=>{
     try {
         // we got this api end point from TMBD when ever we wil hit this api 
         // end point we willl get now playing movie list
