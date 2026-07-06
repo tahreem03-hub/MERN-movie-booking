@@ -103,13 +103,17 @@ export const AppProvider = ({ children }) => {
         favouriteMovies, fetchFavouriteMovies
     }
     return (
-        <AppContext.Provider>
+        <AppContext.Provider value={value}>
             {children}
         </AppContext.Provider>
     )
 }
 
-{/* Now to access this context in another file here we'll create a function*/ }
+{/* Now to access this context in another file here we'll create a function
+    export const useAppContext = () => useContext(AppContext);
+    */ }
 export const useAppContext = () => {
-    useContext(AppContext)
+    return useContext(AppContext)
 }
+
+{/*  when we exported states why are we sending function also in value and in files where we are using this why are we executing functions again? line in Layout.jsx */}

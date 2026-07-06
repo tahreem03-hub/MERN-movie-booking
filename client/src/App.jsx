@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Navbar from './components/Navbar'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
@@ -14,6 +14,8 @@ import Dashboard from './pages/admin/Dashboard'
 import AddShows from './pages/admin/AddShows'
 import ListShows from './pages/admin/ListShows'
 import ListBookings from './pages/admin/ListBookins'
+import { useAppContext } from '../context/AppContext'
+import { SignIn } from '@clerk/react'
 
 
 
@@ -21,6 +23,8 @@ const App = () => {
 
   {/* to hide navbar from admin site */ }
   const isAdminRoute = useLocation().pathname.startsWith('/admin')
+
+  const {user} = useAppContext()
 
   return (
     <>
@@ -34,8 +38,16 @@ const App = () => {
         <Route path='/my-bookings' element={<MyBookings />} />
         <Route path='/favourite' element={<Favourite />} />
 
-        {/* admin */}
-        <Route path='/admin/*' element={<Layout />}>
+        {/* admin 
+        If the user is logged in then only we will open the layout
+        that is mounted in this admin route else we will display the login component
+        we will add fallback redirect URL. So after signing in user will be redirected to this admin route.*/}
+
+        <Route path='/admin/*' element={user ? <Layout /> : (
+          <div className='min-h-screen flex justify-center items-center'>
+            <SignIn fallbackRedirectUrl={'/admin'}/>
+          </div>
+        )}>
           <Route index element={<Dashboard />} />
           <Route path='add-shows' element={<AddShows />} />
           <Route path='list-shows' element={<ListShows />} />
