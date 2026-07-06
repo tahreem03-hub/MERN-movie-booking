@@ -16,11 +16,13 @@ export const AppProvider = ({ children }) => {
     const [isAdmin, setIsAdmin] = useState(false)
     const [shows, setShows] = useState([])
     const [favouriteMovies, setFavouriteMovies] = useState([])
+    const image_base_url = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
 
     const { user } = useUser()
     const { getToken } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
+
 
 
     {/* will be executed when we open the web page and whenever the user changes */ }
@@ -100,7 +102,7 @@ export const AppProvider = ({ children }) => {
         axios, 
         fetchIsAdmin,
         user, getToken, navigate, isAdmin, shows,
-        favouriteMovies, fetchFavouriteMovies
+        favouriteMovies, fetchFavouriteMovies, image_base_url
     }
     return (
         <AppContext.Provider value={value}>
