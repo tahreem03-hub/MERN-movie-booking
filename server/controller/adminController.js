@@ -20,7 +20,7 @@ export const isAdmin = async (req, res) => {
 export const getDashboardData = async (req, res) => {
     try {
         // we will fetch only upcoming shows (greater than current date)
-        const activeShows = await Show.find({ showDateTime: { $gte: new Date() } });
+        const activeShows = await Show.find({ showDateTime: { $gte: new Date() } }).populate('movie');
 
         const totalUsers = await User.countDocuments();
 
