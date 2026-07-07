@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import BlurCircle from './BlurCircle'
 import background from '../assets/backgroundImage.png'
 import MovieCard from './MovieCard'
-import { dummyShowsData } from '../assets/assets'
+import { useAppContext } from '../../context/AppContext'
 
 const FeaturedSection = () => {
+
+    const {shows} = useAppContext()
 
     const navigate = useNavigate()
     return (
@@ -22,7 +24,7 @@ const FeaturedSection = () => {
             </div>
 
             <div className='flex gap-8 flex-wrap max-sm:justify-center'>
-                {dummyShowsData.slice(0,4).map((show)=>
+                {shows.slice(0,4).map((show)=>
                     <MovieCard key={show._id} movie={show} />
                 )}
             </div>
