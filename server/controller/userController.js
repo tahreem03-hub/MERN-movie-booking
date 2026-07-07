@@ -37,13 +37,15 @@ export const updateFavourites = async (req, res) => {
 
         if (!user.privateMetadata.favourites.includes(movieId)) {
             user.privateMetadata.favourites.push(movieId);
+
         }else{  // if movie is already in favourites wee will remove it from favourites
             user.privateMetadata.favourites = user.privateMetadata.favourites.filter( item => item !=movieId )
+            
         }
 
         await clerkClient.users.updateUserMetadata(userId, { privateMetadata: user.privateMetadata })
 
-        res.json({ succes: true, message: 'Favourite Added Successfully' })
+        res.json({ success: true, message: 'Favourite Added Successfully' })
 
     } catch (error) {
         console.error(error);
