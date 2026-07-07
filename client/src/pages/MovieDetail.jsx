@@ -32,6 +32,7 @@ const MovieDetail = () => {
 
   const handleFavourite = async () => {
     try {
+      if(!user) return toast.error("Please login to proceed");
       const { data } = await axios.post('/api/user/update-favourite', { movieId : id }, 
         {headers: { Authorization: `Bearer ${await getToken()}`}})
           

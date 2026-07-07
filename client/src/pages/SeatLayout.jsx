@@ -6,25 +6,31 @@ import { ArrowRightIcon, ClockIcon } from 'lucide-react';
 import isoTimeFormat from '../lib/isoTimeFormat';
 import BlurCircle from '../components/BlurCircle';
 import toast from 'react-hot-toast';
+import { useAppContext } from '../../context/AppContext';
 
 const SeatLayout = () => {
+
+  const {axios, user, getToken} = useAppContext()
 
   const groupRows = [["A", "B"], ["C", "D"], ["E", "F"], ["G", "H"], ["I", "J"]]
   const { date, id } = useParams();
   const navigate = useNavigate()
 
-  const [selectedSeat, setSelectedSeat] = useState([])
+  const [selectedSeats, setSelectedSeats] = useState([])
   const [selectedTime, setSelectedTime] = useState(null)
   const [show, setShow] = useState(null)
 
-  const getShow = () => {
-    const show = dummyShowsData.find(TEMPshow => TEMPshow._id === id)
-    if (show) {
-      setShow({
-        movie: show,
-        dateTime: dummyDateTimeData
-      })
+  const [occupiedSeats, setOccupiedSeats] = useState([])
+
+  const getShow = async () => {
+   try {
+    const {data} = await axios.get(`/api/show/${id}`)
+    if(data.success){
+      setShow(data)
     }
+   } catch (error) {
+    console.error(error)
+   }
   }
 
 
@@ -33,11 +39,17 @@ const SeatLayout = () => {
     if (!selectedTime) {
       return toast("Please select time first")
     }
-    if (!selectedSeat.includes(seatId) && selectedSeat.length > 4) {
-      return toast("you can only select 5 seats")
+    {/* why checked selectedSeats.includes???? 
+       if we have not selected that seat and click on that one then 
+       it will check whether we have selected more than four seat.  means??? */}
+    if (!selectedSeats.includes(seatId) && selectedSeats.length > 4) {
+      return toast.error("you can only select 5 seats")
+    }
+    if (occupiedSeats.includes(seatId)){
+      return toast.error('This seat is already occupied')
     }
     // Toggle seat selection
-    setSelectedSeat(prev => prev.includes(seatId)
+    setSelectedSeats(prev => prev.includes(seatId)
      ? prev.filter(seat => seat !== seatId) // Remove if already selected
       : [...prev, seatId])                  // Add if not selected
   }
@@ -52,8 +64,9 @@ const SeatLayout = () => {
               key={seatId}
               onClick={() => handleSeatClick(seatId)}
               className={`h-8 w-8 rounded border border-primary/60
-              cursor-pointer ${selectedSeat.includes(seatId) &&
-                "bg-primary text-white"}`}>
+              cursor-pointer 
+              ${selectedSeats.includes(seatId) && "bg-primary text-white"}
+              ${occupiedSeats.includes(seatId) && "opacity-50"}`}>
               {seatId}
             </button>
           );
@@ -62,7 +75,46 @@ const SeatLayout = () => {
     </div>
   )
 
-  useEffect(() => getShow(), [])
+  const getOccupiedSeats = async () => {
+    try {
+      const {data} = await axios.get(`/api/booking/show/${selectedTime.showId}`)
+      if(data.success){
+        setOccupiedSeats(data.occupiedSeats)
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const bookTickets = async () => {
+    try {
+
+      if(!user) return toast.error("Please login to proceed");
+      
+      if(!selectedTime || !selectedSeats.length){
+        return toast.error('Please select a time and seats')
+      }
+
+      const {data} = await axios.post('/api/booking/create', {showId: selectedTime.showId, selectedSeats}, 
+         {headers: { Authorization: `Bearer ${await getToken()}` }}
+      )
+
+      if(data.success){
+        toast.success(data.message)
+        navigate('/my-bookings')
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  {/* run this get occupied seats function when ever selected time will change and will only execute if time is already selected */}
+  useEffect(()=>{if(selectedTime){getOccupiedSeats()}}, [selectedTime])
+  useEffect(() =>{ getShow()}, [])
 
   return show ? (
     <div className='flex flex-col md:flex-row px-6 md:px-16 lg:px-40 py-30 md:pt-50'>
@@ -105,7 +157,7 @@ const SeatLayout = () => {
         </div>
 
         <button
-          onClick={() => navigate('/my-bookings')}
+          onClick={bookTickets}
           className='flex items-centergap-1 mt-20 px-10 py-3 text-sm bg-primary
           hover:bg-primary-dull transition rounded-full font-medium cursor-pointer
           active:scale-95'>
